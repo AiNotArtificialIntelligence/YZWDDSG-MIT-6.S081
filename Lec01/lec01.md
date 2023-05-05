@@ -36,7 +36,7 @@ Two file descriptors share an offset if they were derived from the same original
 
 #### IO重定向
 
-![IO重定向](/img/IO重定向.png)
+![IO重定向](./img/IO重定向.png)
 
 ```shell
 #cat < input.txt:
@@ -52,7 +52,7 @@ if(fork() == 0) {
 g++ main.cpp 2>&1 | head			#2>&1 表示将stderr重定向到stdout
 ```
 
-![文件描述符重定向](/img/文件描述符重定向.png)
+![文件描述符重定向](./img/文件描述符重定向.png)
 
 1后面有没有空格的区别，所以
 
