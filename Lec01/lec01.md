@@ -184,6 +184,32 @@ sudo apt install git			#安装git
 cd /usr/local					#编译工具链安装到这个目录下（非必须）
 
 git clone --recursive https://github.com/riscv/riscv-gnu-toolchain	#下载编译工具链
+
+sudo apt-get install autoconf automake autotools-dev curl libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev					#安装必须的包
+
+#配置和构建工具链
+cd riscv-gnu-toolchain 
+./configure --prefix=/usr/local 
+sudo make 
+cd ..
+
+#提取并检索QEMU源码
+wget https://download.qemu.org/qemu-5.1.0.tar.xz 
+tar xf qemu-5.1.0.tar.xz
+
+#构建QEMU
+cd qemu-5.1.0 
+./configure --disable-kvm --disable-werror --prefix=/usr/local --target-list="riscv64-softmmu" 
+make 
+sudo make install 
+cd ..
+
+#测试安装
+riscv64-unknown-elf-gcc --version
+
+#编译运行xv6
+# in the xv6 directory
+make qemu
 ```
 
 ### 
