@@ -189,7 +189,7 @@ sudo apt-get install autoconf automake autotools-dev curl libmpc-dev libmpfr-dev
 
 #配置和构建工具链
 cd riscv-gnu-toolchain 
-./configure --prefix=/usr/local 
+./configure --prefix=/usr/local		#如果提示没权限可以加上sudo
 sudo make 
 cd ..
 
@@ -206,11 +206,84 @@ cd ..
 
 #测试安装
 riscv64-unknown-elf-gcc --version
-
-#编译运行xv6
-# in the xv6 directory
-make qemu
+qemu-system-riscv64 --version
 ```
 
-### 
 
+
+一些错异常及解决方法
+
+![编译报错](./img/编译报错.png)
+
+### 下载xv6源码
+
+```
+git clone git://g.csail.mit.edu/xv6-labs-2020
+cd xv6-labs-2020
+git checkout util
+```
+
+### clone xv6源码并关联到自己的github仓库
+
+github上新建仓库，不要添加README
+
+![创建仓库](./img/创建仓库.png)
+
+虚拟机中进入xv6-labs-2020目录中，删除原有的git相关信息并初始化设置git邮箱名字等
+
+```shell
+git config --global user.email "xxx@XXX"
+git config --gloable user.name "XXX"
+```
+
+将本地代码 添加到仓库（命令执行不成功前面加sudo）
+
+```shell
+sudo git add . 
+sudo git commit -m "XXXXX"
+```
+
+关联远程仓库并push代码
+
+```shell
+sudo git remote add origin https://github.com/AiNotArtificialIntelligence/xv6-labs-2020
+sudo git push -u origin master
+```
+
+
+
+使用`sudo git push -u origin master`时输入邮箱密码会报错。如下图
+
+![git push报错](./img/git push报错.png)
+
+这是因为密码凭证不可以使用了，需要换成token，下面时如何换成token
+
+在github的setting中找到 Developer settings，然后找到 personal access tokens，申请token，申请完之后记录下token，然后把token添加到远程仓库链接中
+
+```shell
+git remote set-url origin https://<token>@github.com/<username>/<REPO>.git
+#注意这里的username是github中的用户名，我的话就是AiNotArtificialIntelligence而不是yzwddsg
+#repo的话就是仓库名
+```
+
+### 编译运行xv6源码
+
+进入xv6源码目录执行`make qemu`
+
+
+
+编译xv6源码报错
+
+![编译xv6报错](./img/编译xv6报错.png)
+
+在user/sh.c处添加`__attribute__((noreturn))`
+
+![解决编译xv6报错](./img/解决编译xv6报错.png)
+
+
+
+编译成功后，`ls`命令可以出现一列文件
+
+### lab1
+
+开始之前先切换分支
